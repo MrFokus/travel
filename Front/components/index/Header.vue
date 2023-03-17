@@ -12,6 +12,7 @@
       </nav>
       <div class="profile center">
         <p class="user-name">Ales Nesetril</p>
+
         <img src="avatar.png" alt="">
       </div>
     </div>
