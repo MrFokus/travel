@@ -13,14 +13,14 @@
 
         </div>
         <div class="input center date">
-            <img src="calendar.svg" alt="">
+          <img src="calendar.svg" alt="">
           <div>
             <p>На какие даты?</p>
             <div style="display: flex">
-<!--              <p style="font-weight: 700;color: black">С</p>-->
+              <!--              <p style="font-weight: 700;color: black">С</p>-->
               <input type="date">
               –
-<!--              <p style="font-weight: 700; color: black">По</p>-->
+              <!--              <p style="font-weight: 700; color: black">По</p>-->
               <input type="date">
             </div>
 
@@ -30,12 +30,12 @@
           <img src="visitor.svg" alt="">
           <div>
             <p>Сколько вас?</p>
-            <select name="guests" >
-              <option  v-for="guest in 8">{{guest}}</option>
+            <select name="guests">
+              <option v-for="guest in 8">{{ guest }}</option>
             </select>
           </div>
         </div>
-        <a href=""><img src="search.svg" alt=""></a>
+        <a href=""><img src="search.svg" alt=""> <span class="word-search">Найти</span></a>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@
   height: min(100vh, 825px);
   background-position: center;
   background-size: cover;
-  border-radius: 0 0 64px 64px ;
+  border-radius: 0 0 64px 64px;
 }
 
 .center {
@@ -83,15 +83,22 @@
 
 .input {
   flex-direction: row;
-  width: min(30%,300px);
+  width: min(30%, 300px);
 }
-.input:nth-child(2){
-  width: min(40%,400px);
+
+.input:nth-child(2) {
+  width: min(40%, 400px);
 }
-h1{
+
+h1 {
   color: white;
-  font-size: min(8vw,64px);
+  text-align: center;
+  font-size: min(8vw, 64px);
 }
+.word-search{
+  display: none;
+}
+
 .input > div > input {
   border: none;
   font-weight: 500;
@@ -118,39 +125,95 @@ h1{
 }
 
 .input > img {
-  margin-right: min(5%,16px);
-  margin-left: min(15%,64px);
   width: 40px;
 }
 
 .date {
   display: flex;
 }
-.date>img{
+
+.date > img {
   width: 40px;
 }
-.date>div>div{
+
+.date > div > div {
 
   justify-content: space-between;
 }
-.guests{
+
+.guests {
   flex-direction: row;
-  margin-right: min(5vw,130px);
+  margin-right: min(5vw, 130px);
 }
-.search>a{
+
+.search > a {
   background-color: #7B61FF;
   padding: 10px;
   border-radius: 10px;
 }
-button{
+
+button {
   background-color: #7B61FF;
   padding: 10px;
   color: white;
   border: none;
   border-radius: 10px;
-  margin-bottom: 150px;
+  margin-bottom: min(20vw,150px);
 }
-.date>div>div>input{
+
+.date > div > div > input {
   width: min(10vw, 120px);
 }
+
+@media screen and (max-width: 740px) {
+  .search {
+    flex-direction: column;
+    height: auto;
+    width: min(90%, 400px);
+    padding: min(1vw, 20px);
+    align-items: normal;
+  }
+
+  img {
+    margin: 0 2vw 0 0;
+    width:min(10vw,40px);
+    height: min(10vw,40px);
+  }
+
+  .input {
+    width: min(100%, 360px);
+    align-content: start;
+    align-items: normal;
+    justify-content: normal;
+    margin: 0 0 2vw 2vw;
+  }
+
+  .search-block {
+    border-radius: 0;
+  }
+  .date{
+    width: 100%;
+  }
+  .date>div{
+    width: 200px;
+  }
+  .date>div>div>input{
+    width: min(20vw,200px);
+  }
+  h1{
+    width: 80vw;
+    text-align: center;
+  }
+  button{
+    margin-bottom: 10vw;
+  }
+  .word-search{
+    display: inline-block;
+    color: white;
+    font-size: min(5vw,24px);
+    width: 80%;
+    text-align: center;
+  }
+}
+
 </style>
