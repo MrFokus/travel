@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <Header/>
+    <Header :class="headerBackground"/>
     <Main/>
   </div>
 
@@ -10,9 +10,35 @@
 import Header from '@/components/index/Header'
 import Main from "~/components/index/Main";
 export default {
+  data(){
+    return{
+      headerBackground:"",
+    }
+  },
   components:{
     Main,
     Header,
+  },
+  created() {
+    if (process.client) {
+      window.addEventListener('scroll', this.handleScroll);
+    }
+  },
+  destroyed () {
+    if (process.client) {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
+  },
+  methods:{
+    handleScroll(event){
+      if(window.scrollY>40){
+        this.headerBackground='backGround';
+      }
+      else{
+        this.headerBackground='';
+      }
+      console.log(window.scrollY)
+    }
   }
 }
 </script>
@@ -25,5 +51,8 @@ export default {
   }
   Header{
     position: fixed;
+  }
+  .backGround{
+    background-color: black;
   }
 </style>

@@ -14,7 +14,7 @@ export default {
     link: [
     ]
   },
-
+  ssr:false,
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'ant-design-vue/dist/antd.css'
@@ -46,5 +46,5 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
 }

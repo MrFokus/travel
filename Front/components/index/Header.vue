@@ -5,30 +5,33 @@
         <img src="logo.svg" alt="">
       </div>
       <nav>
-        <a href="">Home</a>
-        <a href="">Hotels</a>
-        <a href="">Tours</a>
-        <a href="">Contact</a>
+        <nuxt-link to="/">Home</nuxt-link>
+        <nuxt-link to="#">Hotels</nuxt-link>
+        <nuxt-link to="#">Tours</nuxt-link>
+        <nuxt-link to="#">Contact</nuxt-link>
       </nav>
       <div class="profile center">
         <p class="user-name">Ales Nesetril</p>
-        <img src="avatar.png" alt="">
+        <nuxt-link to="/account"><img src="avatar.png" alt=""></nuxt-link>
       </div>
       <div @click="foo()" class="mobile-menu-icon center">
-        <div :class=" isRotate + ' burger'"><span></span></div>
+        <div :class=" isMenuShow + ' burger'"><span></span></div>
       </div>
-      <div v-if="isMenu" class="mobile-menu center">
+
+      <Transition  name="showMenu">
+        <div v-if="isMenu" class="mobile-menu center">
         <div class="profile center">
           <p class="user-name">Ales Nesetril</p>
-          <img src="avatar.png" alt="">
+          <nuxt-link to="/account"><img src="avatar.png" alt=""></nuxt-link>
         </div>
         <nav>
-          <a href="">Home</a>
-          <a href="">Hotels</a>
-          <a href="">Tours</a>
-          <a href="">Contact</a>
+          <nuxt-link to="">Home</nuxt-link>
+          <nuxt-link to="">Hotels</nuxt-link>
+          <nuxt-link to="">Tours</nuxt-link>
+          <nuxt-link to="">Contact</nuxt-link>
         </nav>
       </div>
+      </Transition>
     </div>
   </header>
 </template>
@@ -37,16 +40,16 @@ export default {
   data() {
     return {
       isMenu: false,
-      isRotate: '',
+      isMenuShow: '',
     }
   },
   methods: {
     foo() {
       this.isMenu=!this.isMenu
-      if (this.isRotate !== 'rotate') {
-        this.isRotate = 'rotate';
+      if (this.isMenuShow !== 'menu-show') {
+        this.isMenuShow = 'menu-show';
       } else {
-        this.isRotate = '';
+        this.isMenuShow = '';
       }
 
     }
@@ -68,6 +71,7 @@ export default {
 
 header {
   width: 100vw;
+  top:0;
 }
 
 .logo > img {
@@ -77,7 +81,8 @@ header {
 .content {
   width: min(100%, 1440px);
   margin: 10px 0 10px 0;
-  padding: 0 1vw 0 1vw
+  padding: 0 1vw 0 1vw;
+  flex-direction: row;
 }
 
 nav {
@@ -96,7 +101,9 @@ nav > a {
 nav > a:last-child {
   margin-right: 0;
 }
-
+.profile{
+  flex-direction: row;
+}
 .profile > .user-name {
   font-family: 'Poppins', serif;
   font-size: 14px;
@@ -104,7 +111,7 @@ nav > a:last-child {
   margin-right: 10px;
 }
 
-.profile > img {
+.profile >a> img {
   width: min(15vw, 48px);
 }
 .mobile-menu{
@@ -161,7 +168,14 @@ nav > a:last-child {
     width: 50px;
     /*position: relative;*/
   }
-
+  .showMenu-enter-active,
+  .showMenu-leave-active {
+    transition: opacity 0.5s;
+  }
+  .showMenu-enter,
+  .showMenu-leave-to {
+    opacity: 0;
+  }
   /*.closed {*/
   /*  width: 50px;*/
   /*  height: 50px;*/
@@ -174,20 +188,20 @@ nav > a:last-child {
 
   /*.menu-enter-active, .menu-leave-active { transition: all 5s; }*/
   /*.menu-enter, .menu-leave-active { opacity: 0; }*/
-  .rotate span {
+  .menu-show span {
     top: 5%;
     transform: rotate(90deg);
     transform-origin: center center;
     transition: all .5s;
   }
 
-  .rotate::before {
+  .menu-show::before {
     top: 50%;
     transform: rotate(90deg) translate(0, -400%);
     transform-origin: center center;
   }
 
-  .rotate::after {
+  .menu-show::after {
     top: 50%;
     transform: rotate(90deg) translate(0, 400%);
     transform-origin: center center;
