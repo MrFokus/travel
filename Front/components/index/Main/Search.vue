@@ -1,10 +1,15 @@
 <template>
   <div class="search">
-    <div class="input center">
+    <div class="input center searching">
       <img src="point.svg" alt="">
       <div>
         <p>Куда хотите?</p>
-        <input v-model="InputObject" type="text">
+        <input @change="Relev()" v-model="InputObject" type="text">
+        <div v-if="Object.keys(relevantStr).length>0" class="relev">
+          <ul>
+            <li @click="RelevSearch(row.name)" v-for="row in relevantStr">{{row.name}}</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="input center date">
@@ -42,6 +47,7 @@ export default {
       DateFrom:null,
       DateTo:null,
       Peoples: '1',
+      relevantStr:{}
     }
   },
   methods:{
@@ -49,11 +55,30 @@ export default {
       if (this.InputObject && this.DateFrom && this.DateTo && this.Peoples!== 0) {
         this.$router.push({
           path: 'search-result',
-          query: {type: 'mixed', name: this.InputObject, dateFrom: this.DateFrom, dateTo: this.DateTo, peoples:this.Peoples}
+          query: {name: this.InputObject, dateFrom: this.DateFrom, dateTo: this.DateTo, peoples:this.Peoples}
         })
       } else {
         console.log("NULL params Input"); //TODO: Сделать модалку для ошибки
         console.log(typeof this.Peoples,this.Peoples)
+      }
+    },
+    async Relev(){
+      console.log(this.InputObject)
+      if(this.InputObject.length>=3){
+        let res = await this.$axios.get('/search/'+this.InputObject)
+        this.relevantStr=res.data
+      }
+    },
+    RelevSearch(name){
+      this.InputObject = name;
+      this.Search()
+    }
+  },
+  watch:{
+    InputObject(){
+      this.Relev()
+      if (this.InputObject.length===0){
+        this.relevantStr = {}
       }
     }
   },
@@ -92,7 +117,26 @@ export default {
   padding: 8px;
 
 }
+.searching{
+  position: relative;
 
+}
+.relev{
+  position: absolute;
+  width: 100%;
+  padding: 8px;
+  background-color: white;
+}
+.relev>ul li:first-child{
+  border:none;
+}
+.relev>ul li{
+  border-top: #bdbdbd 1px solid;
+  cursor: pointer;
+}
+.relev>ul li:hover{
+  background-color: #bdbdbd;
+}
 .input {
   flex-direction: row;
   width: min(30%, 300px);

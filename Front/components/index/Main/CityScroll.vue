@@ -16,34 +16,43 @@ export default{
   data(){
     return{
       cities:[
-        {
-          country:'Россия',
-          city:'Москва',
-          img:'https://all-aforizmy.ru/wp-content/uploads/2022/03/31942208356_b7e7a8972c_o.jpg',
-        },
-        {
-          country:'Россия',
-          city:'Москва',
-          img:'https://mobimg.b-cdn.net/v3/fetch/67/672e81d6b92447531328663207c9599f.jpeg?w=1470&r=0.5625',
-        },
-        {
-          country:'Россия',
-          city:'Москва',
-          img:'https://kartinkin.net/pics/uploads/posts/2022-08/1660512893_29-kartinkin-net-p-goroda-avstralii-krasivo-foto-33.jpg',
-        },
-        {
-          country:'Россия',
-          city:'Москва',
-          img:'https://domdecor74.ru/upload/iblock/eb5/eb5b69212f3abd6d7dd8175a4798e178.jpg',
-        },
-        {
-          country:'Россия',
-          city:'Москва',
-          img:'https://www.malls.ru/upload/iblock/02e/kazan.jpg',
-        },
+        // {
+        //   country:'Россия',
+        //   city:'Москва',
+        //   img:'https://all-aforizmy.ru/wp-content/uploads/2022/03/31942208356_b7e7a8972c_o.jpg',
+        // },
+        // {
+        //   country:'Россия',
+        //   city:'Москва',
+        //   img:'https://mobimg.b-cdn.net/v3/fetch/67/672e81d6b92447531328663207c9599f.jpeg?w=1470&r=0.5625',
+        // },
+        // {
+        //   country:'Россия',
+        //   city:'Москва',
+        //   img:'https://kartinkin.net/pics/uploads/posts/2022-08/1660512893_29-kartinkin-net-p-goroda-avstralii-krasivo-foto-33.jpg',
+        // },
+        // {
+        //   country:'Россия',
+        //   city:'Москва',
+        //   img:'https://domdecor74.ru/upload/iblock/eb5/eb5b69212f3abd6d7dd8175a4798e178.jpg',
+        // },
+        // {
+        //   country:'Россия',
+        //   city:'Москва',
+        //   img:'https://www.malls.ru/upload/iblock/02e/kazan.jpg',
+        // },
       ],
-
     }
+  },
+  methods:{
+    async getAllCity(){
+      await this.$store.dispatch('getSlideCity')
+      this.cities= await  this.$store.getters.slide_city
+      console.log(this.cities.data)
+    },
+  },
+  mounted() {
+    this.getAllCity()
   }
 }
 </script>

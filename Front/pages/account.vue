@@ -1,7 +1,9 @@
 <template>
+  <div>
   <Loader v-if="isLoading"/>
   <UserAccount v-else-if="!isAdmin"/>
   <AdminAccount v-else/>
+  </div>
 </template>
 
 <script>
@@ -11,8 +13,11 @@ import CardPassengers from "@/components/account/CardPassengers";
 import UserAccount from "@/components/account/UserAccount";
 import AdminAccount from "@/components/account/AdminAccount";
 import Loader from "@/components/Loader"
+import auth from "@/mixins/auth";
 
 export default {
+  middleware:'auth',
+  mixins:[auth],
   components: {
     Loader,
     AdminAccount,
@@ -27,19 +32,37 @@ export default {
       isAdmin: '',
     }
   },
+  computed:{
+    user(){
+      console.log("sfgsfg", this.$store.getters["user/user"])
+      return this.$store.getters["user/user"]
+    }
+  },
+  watch:{
+    user(val){
+      console.log(this.user,"sfgsfg")
+      if(this.user)
+      this.checkAdmin()
+    }
+  },
   methods: {
-
     checkAdmin() {
-      this.isAdmin = !!localStorage.getItem('isAdmin');
-      console.log(localStorage.getItem('isAdmin'))
+      // await this.$store.dispatch("user/getUser",this.$store.getters["user/user"].id)
+      console.log(this.user)
+      if(this.user.role==="admin"){
+        this.isAdmin = true
+      }
+      else{
+        this.isAdmin = false
+      }
       this.isLoading=false;
-
     }
 
 
   },
   mounted() {
-    this.checkAdmin()
+    // await this.getAuthMixins()
+    // this.checkAdmin()
   }
 }
 </script>

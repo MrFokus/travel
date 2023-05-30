@@ -27,9 +27,6 @@ export default {
   },
   mounted() {
     console.log(this.$route.query.type)
-    if(this.$route.query.type!=='mixed'){
-
-    }
   }
 }
 </script>

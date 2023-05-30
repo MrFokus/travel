@@ -2,26 +2,27 @@
   <div class="account center">
     <div class="background"></div>
     <div class="content">
+      <nuxt-link class="back" to="/">Назад</nuxt-link>
       <h1>Мои данные</h1>
       <div class="user-data">
         <div class="login">
           <p>Логин</p>
-          <input value="MrFokus" type="text">
+          <input v-model="login" type="text">
         </div>
         <div class="telephone">
           <p>Телефон</p>
-          <input value="+79189999999" type="tel">
+          <input v-model="phone" type="tel">
         </div>
         <div class="email">
           <p>Электронная почта</p>
-          <input value="point20000000@mail.ru" type="email">
+          <input v-model="mail" type="email">
         </div>
-        <button @click="foo" class="save-user-data">Сохранить</button>
+        <button @click="updateDataUser" class="save-user-data">Сохранить</button>
       </div>
       <h1>Сотрудники</h1>
       <div class="stuff">
         <!--TODO: сделать модальные окна добавления админа-->
-        <button class="add-passengers">+</button>
+        <button v-if="$store.getters['user/user'].role === 'manager'" class="add-passengers">+</button>
         <div class="scroll-cards">
           <CardPassengers v-for="pass in 10" :key="pass"/>
           <!--TODO: сделать модальные окна изменения админа -->
@@ -49,15 +50,25 @@ export default {
     CardTravelHistory,
   },
   data() {
-    return {}
-  },
-  methods: {
-    foo(){
-      localStorage.removeItem('isAdmin');
-      console.log(localStorage.getItem('isAdmin'))
-      location.reload()
+    return {
+      login:'',
+      phone:"",
+      mail:"",
     }
   },
+  methods: {
+    updateDataUser(){
+      this.$store.dispatch("user/updateUser", {id: this.$store.getters["user/user"].id, login: this.login, phone:this.phone, mail: this.mail})
+      // location.reload()
+    }
+  },
+  mounted() {
+    let user = this.$store.getters["user/user"]
+    console.log(user)
+    this.login = user.login;
+    this.phone = user.phone;
+    this.mail = user.mail;
+  }
 
 }
 </script>
@@ -197,7 +208,12 @@ input {
 .CardUpcomingTrips:first-child, .CardTravelHistory:first-child {
   margin: 0;
 }
+.back{
+  padding: 8px 16px;
+  background-color: #7B61FF;
+  color: white;
 
+}
 .report{
   width: min(50%,150px);
   padding: 5px 10px;

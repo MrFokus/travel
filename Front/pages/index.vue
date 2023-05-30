@@ -9,7 +9,9 @@
 <script>
 import Header from '@/components/index/Header'
 import Main from "~/components/index/Main";
+import auth from "@/mixins/auth";
 export default {
+  middleware:'auth',
   data(){
     return{
       headerBackground:"",

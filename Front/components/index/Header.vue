@@ -10,33 +10,37 @@
         <nuxt-link to="#">Tours</nuxt-link>
         <nuxt-link to="#">Contact</nuxt-link>
       </nav>
-      <div class="profile center">
+      <div v-if="$store.getters['user/user']" class="profile center">
         <p class="user-name">Ales Nesetril</p>
         <nuxt-link to="/account"><img src="avatar.png" alt=""></nuxt-link>
+      </div>
+      <div v-else class="sign">
+        <nuxt-link to="/auth">Войти</nuxt-link>
       </div>
       <div @click="foo()" class="mobile-menu-icon center">
         <div :class=" isMenuShow + ' burger'"><span></span></div>
       </div>
-
-      <Transition  name="showMenu">
+      <Transition name="showMenu">
         <div v-if="isMenu" class="mobile-menu center">
-        <div class="profile center">
-          <p class="user-name">Ales Nesetril</p>
-          <nuxt-link to="/account"><img src="avatar.png" alt=""></nuxt-link>
+          <div class="profile center">
+            <p class="user-name">Ales Nesetril</p>
+            <nuxt-link to="/account"><img src="avatar.png" alt=""></nuxt-link>
+          </div>
+          <nav>
+            <nuxt-link to="">Home</nuxt-link>
+            <nuxt-link to="">Hotels</nuxt-link>
+            <nuxt-link to="">Tours</nuxt-link>
+            <nuxt-link to="">Contact</nuxt-link>
+          </nav>
         </div>
-        <nav>
-          <nuxt-link to="">Home</nuxt-link>
-          <nuxt-link to="">Hotels</nuxt-link>
-          <nuxt-link to="">Tours</nuxt-link>
-          <nuxt-link to="">Contact</nuxt-link>
-        </nav>
-      </div>
       </Transition>
     </div>
   </header>
 </template>
 <script>
+
 export default {
+
   data() {
     return {
       isMenu: false,
@@ -45,7 +49,7 @@ export default {
   },
   methods: {
     foo() {
-      this.isMenu=!this.isMenu
+      this.isMenu = !this.isMenu
       if (this.isMenuShow !== 'menu-show') {
         this.isMenuShow = 'menu-show';
       } else {
@@ -71,7 +75,7 @@ export default {
 
 header {
   width: 100vw;
-  top:0;
+  top: 0;
 }
 
 .logo > img {
@@ -101,9 +105,11 @@ nav > a {
 nav > a:last-child {
   margin-right: 0;
 }
-.profile{
+
+.profile {
   flex-direction: row;
 }
+
 .profile > .user-name {
   font-family: 'Poppins', serif;
   font-size: 14px;
@@ -111,12 +117,14 @@ nav > a:last-child {
   margin-right: 10px;
 }
 
-.profile >a> img {
+.profile > a > img {
   width: min(15vw, 48px);
 }
-.mobile-menu{
+
+.mobile-menu {
   display: none;
 }
+
 @media screen and (max-width: 480px) {
   .burger {
     display: flex;
@@ -168,14 +176,17 @@ nav > a:last-child {
     width: 50px;
     /*position: relative;*/
   }
+
   .showMenu-enter-active,
   .showMenu-leave-active {
     transition: opacity 0.5s;
   }
+
   .showMenu-enter,
   .showMenu-leave-to {
     opacity: 0;
   }
+
   /*.closed {*/
   /*  width: 50px;*/
   /*  height: 50px;*/
@@ -206,7 +217,8 @@ nav > a:last-child {
     transform: rotate(90deg) translate(0, 400%);
     transform-origin: center center;
   }
-  .mobile-menu{
+
+  .mobile-menu {
     display: flex;
     background-color: #ffffff;
     border-radius: 10px;
@@ -217,21 +229,25 @@ nav > a:last-child {
     flex-direction: column;
 
   }
-  .mobile-menu>nav{
+
+  .mobile-menu > nav {
     display: block;
     width: 100%;
   }
-  .mobile-menu>.profile{
+
+  .mobile-menu > .profile {
     display: flex;
-    margin: 20px 0 20px 0 ;
+    margin: 20px 0 20px 0;
   }
-  .mobile-menu>nav>a{
+
+  .mobile-menu > nav > a {
     display: block;
     text-align: end;
     margin: 0 20px 10px 0;
     font-size: 16px;
   }
-  .profile>.user-name{
+
+  .profile > .user-name {
     color: black;
   }
 }

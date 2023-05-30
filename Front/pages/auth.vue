@@ -4,11 +4,11 @@
       <div class="sign-in-container">
         <h1>Добро пожаловать</h1>
         <p>Введите логин</p>
-        <input type="email">
+        <input type="email" v-model="login">
         <p>Введите пароль</p>
-        <input type="password">
+        <input type="password" v-model="password">
         <nuxt-link to="/registration">Нет аккаунта?</nuxt-link>
-        <button>Войти</button>
+        <button @click="Auth">Войти</button>
       </div>
 
     </div>
@@ -19,9 +19,23 @@
  export default {
    data(){
      return{
+       login:'',
+       password:'',
      }
    },
    methods:{
+     async Auth(){
+       const res = await this.$axios.post('/auth', {
+         login:this.login,
+         password:this.password,
+       })
+       console.log(res)
+       if(res.data.status === 200 &&res){
+         await localStorage.setItem("user", JSON.stringify( res.data))
+         await this.$store.commit('user/setUser',res.data)
+         await this.$router.push('/account')
+       }
+     }
    }
 
  }
