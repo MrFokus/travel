@@ -13,24 +13,41 @@ export class UserService {
     ) {
     }
 
-    async registration(createUserDto: CreateUserDto):Promise<any> {
+    async registration(createUserDto: CreateUserDto): Promise<any> {
         try {
             let check_user = await this.userRepository.query(`SELECT * FROM "user" WHERE 'login'='${createUserDto.login}' OR 'phone'='${createUserDto.tel}'`);
             console.log(check_user)
             if (check_user.length === 0) {
                 const hash_password = crypto.createHash('md5').update(createUserDto.password).digest('hex');
                 await this.userRepository.query(`INSERT INTO "user" (login, password, mail, phone, role) VALUES ('${createUserDto.login}', '${hash_password}', '${createUserDto.mail}', '${createUserDto.tel}', 'customer')`)
-                return await this.auth({login:createUserDto.login,password:createUserDto.password})
+                return await this.auth({login: createUserDto.login, password: createUserDto.password})
             }
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e)
         }
 
 
     }
 
-    async auth(inputData: { login: string, password: string }):Promise<any> {
+    async addPass(params) {
+        console.log(params)
+        try {
+            await this.userRepository.query(`INSERT INTO public.passenger(
+            user_id, name, birthday, passport)
+            VALUES (${params.user_id}, '${params.name}', '${params.birthday}', '${params.passport}');
+            `)
+            return await this.getPassengers(params)
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+
+    async getPassengers(params) {
+        return await this.userRepository.query(`SELECT * FROM "passenger" WHERE user_id=${params.user_id}`)
+    }
+
+    async auth(inputData: { login: string, password: string }): Promise<any> {
         try {
             let hash_password = crypto.createHash('md5').update(inputData.password).digest('hex');
             console.log(hash_password)
@@ -42,20 +59,19 @@ export class UserService {
             if (check_user.length !== 0) {
                 return {
                     status: 200,
-                    id:check_user[0].id,
+                    id: check_user[0].id,
                     login: check_user[0].login,
-                    mail:check_user[0].mail,
-                    phone:check_user[0].phone,
-                    role:check_user[0].role,
+                    mail: check_user[0].mail,
+                    phone: check_user[0].phone,
+                    role: check_user[0].role,
                 }
             } else {
                 return {
                     status: 400,
-                    message:"Не верный логин или пароль",
+                    message: "Не верный логин или пароль",
                 }
             }
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e)
         }
 
@@ -63,19 +79,18 @@ export class UserService {
 
     async update(params) {
         try {
-            let checkFields  = await this.userRepository.query(`SELECT * FROM public."user" WHERE login='${params.login}' OR mail='${params.mail}' OR phone='${params.phone}'`)
-            if (checkFields.length <=1 ) {
+            let checkFields = await this.userRepository.query(`SELECT * FROM public."user" WHERE login='${params.login}' OR mail='${params.mail}' OR phone='${params.phone}'`)
+            if (checkFields.length <= 1) {
                 await this.userRepository.query(`UPDATE public."user" SET login='${params.login}', mail='${params.mail}', phone='${params.phone}' WHERE id = ${params.id}`)
                 return await this.userRepository.query(`SELECT * FROM public."user" WHERE id = ${params.id}'`)
             }
-        }
-        catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
 
-    async get(id:any){
-        let res= await this.userRepository.query(`SELECT * FROM "user" WHERE id = ${id}`)
+    async get(id: any) {
+        let res = await this.userRepository.query(`SELECT * FROM "user" WHERE id = ${id}`)
         return res[0]
 
     }

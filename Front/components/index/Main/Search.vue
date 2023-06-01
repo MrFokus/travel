@@ -47,7 +47,8 @@ export default {
       DateFrom:null,
       DateTo:null,
       Peoples: '1',
-      relevantStr:{}
+      relevantStr:{},
+      view:false,
     }
   },
   methods:{
@@ -67,11 +68,23 @@ export default {
       if(this.InputObject.length>=3){
         let res = await this.$axios.get('/search/'+this.InputObject)
         this.relevantStr=res.data
+        this.relevantStr.forEach(val=>{
+          if (this.InputObject === val.name){
+            this.relevantStr = {};
+          }
+        })
+
       }
     },
     RelevSearch(name){
       this.InputObject = name;
+      this.view=false
       this.Search()
+    }
+  },
+  computed:{
+    url(){
+      return this.$route.query
     }
   },
   watch:{
@@ -80,6 +93,9 @@ export default {
       if (this.InputObject.length===0){
         this.relevantStr = {}
       }
+    },
+    url(){
+      this.InputObject=this.$route.query.name
     }
   },
   mounted() {

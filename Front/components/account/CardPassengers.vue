@@ -1,14 +1,19 @@
 <template>
   <div class="card-passengers">
-    <div class="content">
+    <div v-if="Object.keys(passenger).length!==0" class="content">
       <h3 class="name">
-        Иванов Иван Иванович
+        {{ passenger.name }}
       </h3>
-      <p class="passport">0345 054602</p>
+      <p class="passport">{{ passenger.passport }}</p>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  props:['passenger'],
+}
+</script>
 
 <style scoped>
 *{
@@ -22,6 +27,7 @@
     display: inline-block;
     height: 66px;
     margin: 0 10px;
+    box-shadow: 5px 5px 5px -7px rgba(0,0,0,.5);
   }
   .card-passengers:hover{
     background-color: #7B61FF;

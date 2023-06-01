@@ -5,7 +5,7 @@
       <Search class="search"/>
       <h3>{{description}}</h3>
     </div>
-    <SearchResultGrid/>
+    <SearchResultGrid :result="result"/>
 
   </div>
 </template>
@@ -17,7 +17,10 @@ import SearchResultGrid from "@/components/search-result/SearchResultGrid";
 export default {
   data(){
     return{
-      description:'\r\n\r\n\r\n'
+      description:'\r\n\r\n\r\n',
+      result:{
+
+      }
     }
   },
   components:{
@@ -26,7 +29,35 @@ export default {
     Search,
   },
   mounted() {
-    console.log(this.$route.query.type)
+    this.SearchResult()
+  },
+  computed:{
+    url(){
+      return this.$route.query
+    }
+  },
+  watch:{
+    url(){
+      this.SearchResult()
+    }
+  },
+  methods:{
+    async SearchResult(){
+      const req = {
+        params:{
+          name:this.$route.query.name,
+        }
+      }
+      if(this.$route.query.type === 'city'){
+        let res =  await this.$axios.get('/search/city',{params:this.$route.query})
+        this.result=res.data
+        console.log(res)
+      }
+      else if(this.$route.query.type !== 'hotel'){
+        let res = await this.$axios.get('/search-different', req)
+        this.result = res.data
+      }
+    }
   }
 }
 </script>

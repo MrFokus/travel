@@ -6,17 +6,17 @@
       <div class="user-data">
         <div class="login">
           <p>Логин</p>
-          <input value="MrFokus" type="text">
+          <input v-model="login" type="text">
         </div>
         <div class="telephone">
           <p>Телефон</p>
-          <input value="+79189999999" type="tel">
+          <input v-model="phone" type="tel">
         </div>
         <div class="email">
           <p>Электронная почта</p>
-          <input value="point20000000@mail.ru" type="email">
+          <input v-model="mail" type="email">
         </div>
-        <button @click="foo" class="save-user-data">Сохранить</button>
+        <button @click="updateDataUser" class="save-user-data">Сохранить</button>
       </div>
       <h1>Предстоящие поезки</h1>
       <div class="upcoming-trips">
@@ -25,9 +25,9 @@
       <h1>Пассажиры</h1>
       <div class="passengers">
         <!--TODO: сделать модальные окна добавления пассажира-->
-        <button class="add-passengers">+</button>
+        <button @click="addPass=true" class="add-passengers">+</button>
         <div class="scroll-cards">
-          <CardPassengers v-for="pass in 10" :key="pass"/>
+          <CardPassengers :passenger="pass" :key="index" v-for="(pass,index) in passengers"/>
           <!--TODO: сделать модальные окна изменения пассажира -->
         </div>
 
@@ -37,6 +37,8 @@
         <CardTravelHistory class="CardTravelHistory" v-for="hist in 10" :key="hist"/>
       </div>
     </div>
+    <modal-add-pass v-if="addPass" @closeModal="CloseModal"/>
+    <buy-tour :passengers="passengers" v-if="$route.query.type === 'tour'"/>
   </div>
 </template>
 
@@ -44,25 +46,47 @@
 import CardUpcomingTrips from "@/components/account/CardUpcomingTrips";
 import CardTravelHistory from "@/components/account/CardTravelHistory";
 import CardPassengers from "@/components/account/CardPassengers";
+import ModalAddPass from "@/components/account/ModalAddPass";
+import BuyTour from "@/components/account/BuyTour";
 
 export default {
   components: {
     CardUpcomingTrips,
     CardPassengers,
     CardTravelHistory,
+    ModalAddPass,
+    BuyTour,
   },
-  data(){
-    return{
+  data() {
+    return {
+      login:'',
+      phone:"",
+      mail:"",
+      addPass:false,
+      passengers:[],
     }
   },
-  methods:{
-
-    foo(){
-      localStorage.setItem('isAdmin','true');
-      location.reload()
+  methods: {
+    updateDataUser(){
+      this.$store.dispatch("user/updateUser", {id: this.$store.getters["user/user"].id, login: this.login, phone:this.phone, mail: this.mail})
+      // location.reload()
+    },
+    async CloseModal(){
+      this.addPass= false;
+      let id = await this.$store.getters['user/user'].id;
+      let res = await this.$axios.get("/user/passengers",{params:{user_id:id}})
+      this.passengers = res.data
     }
   },
   mounted() {
+    let user = this.$store.getters["user/user"]
+    console.log(user)
+    this.login = user.login;
+    this.phone = user.phone;
+    this.mail = user.mail;
+    this.CloseModal()
+    this.passengers= this.$route.query
+
   }
 
 }
